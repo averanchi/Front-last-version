@@ -7,7 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
-import { fetchPostsNew, fetchTags } from "../redux/slices/postsSlice";
+import {
+  fetchPostsNew,
+  fetchPostsPopular,
+  fetchTags,
+} from "../redux/slices/postsSlice";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -19,19 +23,27 @@ export const Home = () => {
   const isPostLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
 
+  const [order, setOrder] = React.useState("new");
+
   React.useEffect(() => {
-    dispatch(fetchPostsNew());
+    order === "new" ? dispatch(fetchPostsNew()) : dispatch(fetchPostsPopular());
+
     dispatch(fetchTags());
-  }, []);
+  }, [order]);
+
+  const handleTabChange = (event, newValue) => {
+    setOrder(newValue);
+  };
 
   return (
     <>
       <Tabs
         style={{ marginBottom: 15 }}
         value={0}
+        onChange={handleTabChange}
         aria-label="basic tabs example">
-        <Tab label="Новые" />
-        <Tab label="Популярные" />
+        <Tab label="New" value="new" />
+        <Tab label="Popular" value="popular" />
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
