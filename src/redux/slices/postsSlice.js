@@ -1,8 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
 
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const { data } = await axios.get("/posts");
+export const fetchPostsPopular = createAsyncThunk(
+  "posts/fetchPosts",
+  async () => {
+    const { data } = await axios.get("/posts/popular");
+    return data;
+  }
+);
+
+export const fetchPostsNew = createAsyncThunk("posts/fetchPosts", async () => {
+  const { data } = await axios.get("/posts/new");
   return data;
 });
 
@@ -11,8 +19,9 @@ export const fetchTags = createAsyncThunk("posts/fetchTags", async () => {
   return data;
 });
 
-export const fetchRemovePost = createAsyncThunk("posts/fetchRemovePost", async (id) => 
-  axios.delete(`/posts/${id}`)
+export const fetchRemovePost = createAsyncThunk(
+  "posts/fetchRemovePost",
+  async (id) => axios.delete(`/posts/${id}`)
 );
 
 const initialState = {
@@ -31,17 +40,29 @@ const postsSlice = createSlice({
   initialState,
   reducer: {},
   extraReducers: {
-
     // Получение статей
-    [fetchPosts.pending]: (state) => {
+    [fetchPostsNew.pending]: (state) => {
       state.posts.items = [];
       state.posts.status = "loading";
     },
-    [fetchPosts.fulfilled]: (state, action) => {
+    [fetchPostsNew.fulfilled]: (state, action) => {
       state.posts.items = action.payload;
       state.posts.status = "loaded";
     },
-    [fetchPosts.rejected]: (state) => {
+    [fetchPostsNew.rejected]: (state) => {
+      state.posts.items = [];
+      state.posts.status = "error";
+    },
+
+    [fetchPostsPopular.pending]: (state) => {
+      state.posts.items = [];
+      state.posts.status = "loading";
+    },
+    [fetchPostsPopular.fulfilled]: (state, action) => {
+      state.posts.items = action.payload;
+      state.posts.status = "loaded";
+    },
+    [fetchPostsPopular.rejected]: (state) => {
       state.posts.items = [];
       state.posts.status = "error";
     },
@@ -62,9 +83,9 @@ const postsSlice = createSlice({
 
     //Удаление статьи
     [fetchRemovePost.pending]: (state, action) => {
-      
-      state.posts.items = state.posts.items.filter(obj => obj._id !== action.meta.arg);
-     
+      state.posts.items = state.posts.items.filter(
+        (obj) => obj._id !== action.meta.arg
+      );
     },
   },
 });
