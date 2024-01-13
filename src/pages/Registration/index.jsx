@@ -35,7 +35,7 @@ export const Registration = () => {
   const onSubmit = async (values) => {
     const data = await dispatch(fetchRegister(values));
     if (!data.payload) {
-      return alert("You had a problem with registration");
+      return alert("You've had a problem with registration");
     }
     if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);
@@ -49,7 +49,7 @@ export const Registration = () => {
   return (
     <Paper classes={{ root: styles.root }}>
       <Typography classes={{ root: styles.title }} variant="h5">
-        Создание аккаунта
+        Registration
       </Typography>
       <div className={styles.avatar}>
         <Avatar sx={{ width: 100, height: 100 }} />
@@ -58,15 +58,15 @@ export const Registration = () => {
         <TextField
           error={Boolean(errors.fullName?.message)}
           helperText={errors.fullName?.message}
-          {...register("fullName", { required: "Укажите Имя пользователя" })}
+          {...register("fullName", { required: "Type here your full name" })}
           className={styles.field}
-          label="Полное имя"
+          label="Full name"
           fullWidth
         />
         <TextField
           error={Boolean(errors.email?.message)}
           helperText={errors.email?.message}
-          {...register("email", { required: "Укажите почту" })}
+          {...register("email", { required: "Type here your email" })}
           className={styles.field}
           label="E-Mail"
           fullWidth
@@ -74,9 +74,9 @@ export const Registration = () => {
         <TextField
           error={Boolean(errors.password?.message)}
           helperText={errors.password?.message}
-          {...register("password", { required: "Укажите пароль" })}
+          {...register("password", { required: "Make up a password" })}
           className={styles.field}
-          label="Пароль"
+          label="Password"
           fullWidth
         />
 
@@ -86,7 +86,7 @@ export const Registration = () => {
           size="large"
           variant="contained"
           fullWidth>
-          Зарегистрироваться
+          Sign up
         </Button>
       </form>
     </Paper>
