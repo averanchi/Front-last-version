@@ -35,7 +35,7 @@ export const Header = () => {
                   onClick={onClickLogout}
                   variant="contained"
                   color="error">
-                  Выйти
+                  LogOut
                 </Button>
               </>
             ) : (

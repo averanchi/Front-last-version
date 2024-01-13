@@ -34,7 +34,7 @@ export const AddPost = () => {
       spellChecker: false,
       maxHeight: "400px",
       autofocus: true,
-      placeholder: "Введите текст...",
+      placeholder: "Type text here...",
       status: false,
       autosave: {
         enabled: true,
@@ -79,7 +79,7 @@ export const AddPost = () => {
       navigate(`/posts/${_id}`);
     } catch (error) {
       console.warn(error);
-      alert("Ошибка при создании статьи");
+      alert("Error during creating a post");
     }
   };
 
@@ -92,7 +92,7 @@ export const AddPost = () => {
       setImageUrl(data.url);
     } catch (error) {
       console.warn(error);
-      alert("Произошла ошибка при загрузке файла");
+      alert("Error accured by downloading of the file");
     }
   };
   const onClickRemoveImage = () => {
@@ -109,7 +109,7 @@ export const AddPost = () => {
         variant="outlined"
         size="large"
         onClick={() => inputFileRef.current.click()}>
-        Загрузить превью
+        Load Preview
       </Button>
       <input
         ref={inputFileRef}
@@ -123,7 +123,7 @@ export const AddPost = () => {
             variant="contained"
             color="error"
             onClick={onClickRemoveImage}>
-            Удалить
+            Delete
           </Button>
           <br />
           <img
@@ -139,7 +139,7 @@ export const AddPost = () => {
       <TextField
         classes={{ root: styles.title }}
         variant="standard"
-        placeholder="Заголовок статьи..."
+        placeholder="Title..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         fullWidth
@@ -147,7 +147,7 @@ export const AddPost = () => {
       <TextField
         classes={{ root: styles.tags }}
         variant="standard"
-        placeholder="Тэги"
+        placeholder="Tags"
         value={tags}
         onChange={(e) => setTags(e.target.value)}
         fullWidth
@@ -160,9 +160,9 @@ export const AddPost = () => {
       />
       <div className={styles.buttons}>
         <Button onClick={onSubmit} size="large" variant="contained">
-          {isEditing ? "Сохранить изменения" : "Опубликовать"}
+          {isEditing ? "Save changes" : "Create"}
         </Button>
-        <Button size="large">Отмена</Button>
+        <Button size="large">Cansel</Button>
       </div>
     </Paper>
   );
