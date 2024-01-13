@@ -39,7 +39,7 @@ export const Home = () => {
     <>
       <Tabs
         style={{ marginBottom: 15 }}
-        value={0}
+        value={order}
         onChange={handleTabChange}
         aria-label="basic tabs example">
         <Tab label="New" value="new" />

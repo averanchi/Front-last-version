@@ -24,12 +24,34 @@ export const fetchRemovePost = createAsyncThunk(
   async (id) => axios.delete(`/posts/${id}`)
 );
 
+//Create a comment
+export const addComment = createAsyncThunk(
+  "posts/addComment",
+  async (postId) => {
+    const { data } = await axios.post(`/posts/${postId}/comments}`);
+    return data;
+  }
+);
+
+//get comments
+export const fetchComments = createAsyncThunk(
+  "posts/getComments",
+  async (postId) => {
+    const { data } = await axios.get(`/posts/${postId}/comments`);
+    return data;
+  }
+);
+
 const initialState = {
   posts: {
     items: [],
     status: "loading",
   },
   tags: {
+    items: [],
+    status: "loading",
+  },
+  comments: {
     items: [],
     status: "loading",
   },
@@ -40,7 +62,20 @@ const postsSlice = createSlice({
   initialState,
   reducer: {},
   extraReducers: {
-    // Получение статей
+    //Actions with comments
+    [fetchComments.pending]: (state) => {
+      state.status = "loading";
+    },
+    [fetchComments.fulfilled]: (state, action) => {
+      state.items = action.payload;
+      state.status = "loaded";
+    },
+    [fetchComments.rejected]: (state) => {
+      state.items = [];
+      state.status = "error";
+    },
+
+    // Get Posts
     [fetchPostsNew.pending]: (state) => {
       state.posts.items = [];
       state.posts.status = "loading";
@@ -67,7 +102,7 @@ const postsSlice = createSlice({
       state.posts.status = "error";
     },
 
-    //Получение тегов
+    //Get Tags
     [fetchTags.pending]: (state) => {
       state.tags.items = [];
       state.tags.status = "loading";
@@ -81,7 +116,7 @@ const postsSlice = createSlice({
       state.tags.status = "error";
     },
 
-    //Удаление статьи
+    //Remove posts
     [fetchRemovePost.pending]: (state, action) => {
       state.posts.items = state.posts.items.filter(
         (obj) => obj._id !== action.meta.arg
