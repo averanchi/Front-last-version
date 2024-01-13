@@ -64,6 +64,7 @@ const postsSlice = createSlice({
   extraReducers: {
     //Actions with comments
     [fetchComments.pending]: (state) => {
+      state.items = [];
       state.status = "loading";
     },
     [fetchComments.fulfilled]: (state, action) => {

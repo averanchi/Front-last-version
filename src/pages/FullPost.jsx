@@ -7,12 +7,16 @@ import { CommentsBlock } from "../components/CommentsBlock";
 import axios from "../axios";
 
 import Markdown from "react-markdown";
+import { useDispatch } from "react-redux";
+import { fetchComments } from "../redux/slices/postsSlice";
 
 export const FullPost = () => {
   const [data, setData] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
-
+  const dispatch = useDispatch();
   const { id } = useParams();
+
+  const [comments, setComments] = React.useState();
 
   React.useEffect(() => {
     axios
@@ -25,6 +29,12 @@ export const FullPost = () => {
         console.warn(err);
         alert("Ошибка при получении статьи");
       });
+  }, []);
+
+  React.useEffect(() => {
+    axios.get(`/posts/${id}/comments`).then((res) => {
+      setComments(res.data);
+    });
   }, []);
 
   if (isLoading) {
@@ -40,29 +50,12 @@ export const FullPost = () => {
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
-        commentsCount={3}
+        commentsCount={data.commentsCount}
         tags={data.tags}
         isFullPost>
         <Markdown>{data.text}</Markdown>
       </Post>
-      <CommentsBlock
-        items={[
-          {
-            user: {
-              fullName: "Вася Пупкин",
-              avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-            },
-            text: "Это тестовый комментарий 555555",
-          },
-          {
-            user: {
-              fullName: "Иван Иванов",
-              avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-            },
-            text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-          },
-        ]}
-        isLoading={false}>
+      <CommentsBlock items={comments} isLoading={false}>
         <Index />
       </CommentsBlock>
     </>
