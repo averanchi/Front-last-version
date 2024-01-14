@@ -7,16 +7,16 @@ import { CommentsBlock } from "../components/CommentsBlock";
 import axios from "../axios";
 
 import Markdown from "react-markdown";
-import { useDispatch } from "react-redux";
-import { fetchComments } from "../redux/slices/postsSlice";
+import { useSelector } from "react-redux";
+import { selectIsAuth } from "./../redux/slices/auth";
 
 export const FullPost = () => {
   const [data, setData] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
-  const dispatch = useDispatch();
+  const isAuth = useSelector(selectIsAuth);
   const { id } = useParams();
 
-  const [comments, setComments] = React.useState();
+  const [comments, setComments] = React.useState([]);
 
   React.useEffect(() => {
     axios
@@ -37,6 +37,14 @@ export const FullPost = () => {
     });
   }, []);
 
+  const handleCommentAdded = () => {
+    console.log("kuku");
+    // Перезапросить комментарии после добавления нового комментария
+    axios.get(`/posts/${id}/comments`).then((res) => {
+      setComments(res.data);
+    });
+  };
+
   if (isLoading) {
     return <Post isLoading={isLoading} isFullPost />;
   }
@@ -56,7 +64,9 @@ export const FullPost = () => {
         <Markdown>{data.text}</Markdown>
       </Post>
       <CommentsBlock items={comments} isLoading={false}>
-        <Index />
+        {isAuth && (
+          <Index postId={data._id} onCommentAdded={handleCommentAdded} />
+        )}
       </CommentsBlock>
     </>
   );

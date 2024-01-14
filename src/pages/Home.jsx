@@ -77,7 +77,7 @@ export const Home = () => {
           )}
         </Grid>
         <Grid xs={4} item>
-          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
+          {/* <TagsBlock items={tags.items} isLoading={isTagsLoading} /> */}
           <CommentsBlock items={commentsInBlock} isLoading={false} />
         </Grid>
       </Grid>
